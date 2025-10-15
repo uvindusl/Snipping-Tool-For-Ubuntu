@@ -1,11 +1,12 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QLabel
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QLabel, QButtonGroup
+from captureButton import capture_button
 
 class SnappingTool(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Snipping Tool")
-        self.setFixedSize(300,250)
+        self.setFixedSize(360,250)
 
         self.setStyleSheet("""
             QWidget {
@@ -14,6 +15,7 @@ class SnappingTool(QWidget):
                 font-family: "Segoe UI", "Roboto", "Arial";
                 font-size: 10pt;
             }
+            
             QPushButton#takeScreenshotButton {
                 background-color: #3AA05B; 
                 border-radius: 6px;
@@ -28,15 +30,14 @@ class SnappingTool(QWidget):
             QLabel.sectionHeader {
                 font-size: 11pt;
                 font-weight: bold;
-                margin-top: 15px;
+                margin-top: 5px; 
                 margin-bottom: 5px;
             }
 
             QPushButton.captureOption {
-                background-color: #3C3C3C;
-                border: 1px solid #555555;
-                border-radius: 6px;
-                padding: 10px 5px;
+                background-color: transparent; 
+                border: none; 
+                padding: 0px; 
                 min-width: 90px;
                 max-width: 120px;
                 min-height: 80px;
@@ -47,8 +48,9 @@ class SnappingTool(QWidget):
             }
                            
             QPushButton.captureOption:checked { 
-                background-color: #2F2F2F; 
+                background-color: #3C3C3C;
             }
+            
             QPushButton.captureOption QLabel {
                 color: #ffffff;
                 font-size: 9pt;
@@ -62,6 +64,8 @@ class SnappingTool(QWidget):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(20,20,20,20)
         layout.setSpacing(20)
+
+        layout.addWidget(self.select_component())
 
         screenshotButton = QPushButton("Take Screenshot")
         screenshotButton.setObjectName("takeScreenshotButton")
@@ -85,10 +89,28 @@ class SnappingTool(QWidget):
         header.setProperty("class", "sectionHeader")
         layout.addWidget(header)
 
-        capture_button_layout = QHBoxLayout()
-        capture_button_layout.setSpacing(10)
+        captureButtonLayout = QHBoxLayout()
+        captureButtonLayout.setSpacing(10)
 
-        
+        self.captureButtonGroup = QButtonGroup(self)
+        self.captureButtonGroup.setExclusive(True)
+
+        btnScreen = capture_button("Screen", icon_path="../Assets/screen.png", ischecked=True)
+        btnWindow = capture_button("Window", icon_path="../Assets/window.png")
+        btnSelection = capture_button("Selection", icon_path="../Assets/selection.png")
+
+        captureButtonLayout.addWidget(btnScreen)
+        captureButtonLayout.addWidget(btnWindow)
+        captureButtonLayout.addWidget(btnSelection)
+
+        self.captureButtonGroup.addButton(btnScreen)
+        self.captureButtonGroup.addButton(btnWindow)
+        self.captureButtonGroup.addButton(btnSelection)
+
+        layout.addLayout(captureButtonLayout)
+
+        return section
+
 
 def main():
     app = QApplication(sys.argv)

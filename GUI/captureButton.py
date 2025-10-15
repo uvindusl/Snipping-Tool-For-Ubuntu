@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QPushButton, QVBoxLayout, QLabel
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
 
-def capture_button(text, icon_path, ischecked):
+def capture_button(text, icon_path, ischecked=False):
     btn = QPushButton()
     btn.setProperty("class", "captureOption")
     btn.setCheckable(True)
