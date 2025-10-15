@@ -1,11 +1,13 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QLabel, QComboBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QLabel, QFileDialog, QComboBox, QMessageBox
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 import subprocess
+from datetime import datetime
 import time
 import os
 import tempfile 
+from PIL import Image
 
 class ImageDisplayWindow(QWidget):
     def __init__(self, image_path):
@@ -60,7 +62,7 @@ class MainWindow(QMainWindow):
         mode = self.mode_combo.currentText()
 
         temp_dir = tempfile.gettempdir()
-        temp_filename = os.path.join(temp_dir, f"screenshot_temp_{os.getpid()}.png")
+        temp_filename = os.path.join(temp_dir, f"screenshot_temp_{datetime.now()}.png")
         
 
         self.hide()
@@ -72,21 +74,25 @@ class MainWindow(QMainWindow):
             cmd.append("-w")
         elif mode == "area":
             cmd.append("-a")
-            subprocess.run(cmd, check=True)
+            
+        subprocess.run(cmd, check=True)
 
         self.show()
+        self.image_window = ImageDisplayWindow(temp_filename)
+        print(temp_filename)
+        self.image_window.show()
 
-        if os.path.exists(temp_filename):
+        # if os.path.exists(temp_filename):
                 
-            if self.image_window is not None:
-                self.image_window.close()
-                self.image_window = None
+        #     if self.image_window is not None:
+        #         self.image_window.close()
+        #         self.image_window = None
                 
-            self.image_window = ImageDisplayWindow(temp_filename)
-            self.image_window.show()
+        #     self.image_window = ImageDisplayWindow(temp_filename)
+        #     self.image_window.show()
                 
-        else:
-            self.status_label.setText("Operation cancelled or screenshot failed.")
+        # else:
+        #     self.status_label.setText("Operation cancelled or screenshot failed.")
             
         if os.path.exists(temp_filename):
                 os.remove(temp_filename)
