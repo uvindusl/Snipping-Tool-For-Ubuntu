@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QLabel, QFileDialog, QComboBox, QMessageBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QLabel, QComboBox
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 import subprocess
@@ -66,15 +66,13 @@ class MainWindow(QMainWindow):
         self.hide()
         time.sleep(0.3)
 
-        env = os.environ 
-
-        cmd = ["gnome-screenshot", "-f", temp_filename] 
+        cmd = ["gnome-screenshot", "-f", temp_filename]
             
         if mode == "window":
             cmd.append("-w")
         elif mode == "area":
             cmd.append("-a")
-            subprocess.run(cmd, check=True, env=env)
+            subprocess.run(cmd, check=True)
 
         self.show()
 
