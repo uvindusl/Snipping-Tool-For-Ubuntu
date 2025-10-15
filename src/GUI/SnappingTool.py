@@ -95,9 +95,9 @@ class SnappingTool(QWidget):
         self.captureButtonGroup = QButtonGroup(self)
         self.captureButtonGroup.setExclusive(True)
 
-        btnScreen = capture_button("Screen", icon_path="../Assets/screen.png", ischecked=True)
-        btnWindow = capture_button("Window", icon_path="../Assets/window.png")
-        btnSelection = capture_button("Selection", icon_path="../Assets/selection.png")
+        btnScreen = capture_button("Screen", icon_path="../../Assets/screen.png", ischecked=True)
+        btnWindow = capture_button("Window", icon_path="../../Assets/window.png")
+        btnSelection = capture_button("Selection", icon_path="../../Assets/selection.png")
 
         captureButtonLayout.addWidget(btnScreen)
         captureButtonLayout.addWidget(btnWindow)
