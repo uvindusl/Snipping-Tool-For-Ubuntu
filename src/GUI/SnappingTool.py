@@ -1,6 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QLabel, QButtonGroup
-from captureButton import capture_button
+from .captureButton import capture_button
+from ..functions.screenCapture import screenshot_capture
 
 class SnappingTool(QWidget):
     def __init__(self):
@@ -69,6 +70,7 @@ class SnappingTool(QWidget):
 
         screenshotButton = QPushButton("Take Screenshot")
         screenshotButton.setObjectName("takeScreenshotButton")
+        screenshotButton.clicked.connect(lambda: screenshot_capture(self.get_selected_mode()))
 
         buttonLayout = QHBoxLayout()
         buttonLayout.addStretch(1)
@@ -78,6 +80,23 @@ class SnappingTool(QWidget):
         layout.addLayout(buttonLayout)
 
         layout.addStretch(1)
+
+    def get_selected_mode(self):
+        if not self.captureButtonGroup:
+            return "screen"
+        
+        checkedButton = self.captureButtonGroup.checkedButton()
+        if checkedButton:
+            buttonText = checkedButton.text().lower()
+
+            if "screen" in buttonText:
+                return "screen"
+            elif "window" in buttonText:
+                return "window"
+            elif "selection" in buttonText:
+                return "selection"
+            
+        return "screen"
 
     def select_component(self):
         section = QWidget()
@@ -95,9 +114,9 @@ class SnappingTool(QWidget):
         self.captureButtonGroup = QButtonGroup(self)
         self.captureButtonGroup.setExclusive(True)
 
-        btnScreen = capture_button("Screen", icon_path="../../Assets/screen.png", ischecked=True)
-        btnWindow = capture_button("Window", icon_path="../../Assets/window.png")
-        btnSelection = capture_button("Selection", icon_path="../../Assets/selection.png")
+        btnScreen = capture_button("Screen", icon_path="../Assets/screen.png", ischecked=True)
+        btnWindow = capture_button("Window", icon_path="../Assets/window.png")
+        btnSelection = capture_button("Selection", icon_path="../Assets/selection.png")
 
         captureButtonLayout.addWidget(btnScreen)
         captureButtonLayout.addWidget(btnWindow)
@@ -110,13 +129,3 @@ class SnappingTool(QWidget):
         layout.addLayout(captureButtonLayout)
 
         return section
-
-
-def main():
-    app = QApplication(sys.argv)
-    window = SnappingTool()
-    window.show()
-    sys.exit(app.exec())
-
-if __name__ == "__main__":
-    main()
