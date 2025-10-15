@@ -84,10 +84,8 @@ class SnappingTool(QWidget):
     def handle_capture_event(self):
         mode = self.get_selected_mode()
         self.hide()
-        time.sleep(0.3)
-        
-        if screenshot_capture(mode=mode):
-            self.show()
+        screenshot_capture(mode=mode)
+        self.show()
 
     def get_selected_mode(self):
         if not hasattr(self, 'btnScreen'):
