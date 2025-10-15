@@ -9,11 +9,15 @@ def screenshot_capture(mode):
 
     command = ["gnome-screenshot", "-f" , tempFileName]
 
-    if mode == "window":
+    if mode == "screen":
+        pass
+    elif mode == "window":
         command.append("-w")
     elif mode == "area":
         command.append("-a")
 
     subprocess.run(command, check=True)
 
-    print(tempfile)
+    print(f"Screenshot successfully saved to: {tempFileName}")
+
+    return True

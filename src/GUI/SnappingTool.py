@@ -1,7 +1,7 @@
-import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QLabel, QButtonGroup
 from .captureButton import capture_button
 from ..functions.screenCapture import screenshot_capture
+import time
 
 class SnappingTool(QWidget):
     def __init__(self):
@@ -70,7 +70,7 @@ class SnappingTool(QWidget):
 
         screenshotButton = QPushButton("Take Screenshot")
         screenshotButton.setObjectName("takeScreenshotButton")
-        screenshotButton.clicked.connect(lambda: screenshot_capture(self.get_selected_mode()))
+        screenshotButton.clicked.connect(self.handle_capture_event)
 
         buttonLayout = QHBoxLayout()
         buttonLayout.addStretch(1)
@@ -81,22 +81,27 @@ class SnappingTool(QWidget):
 
         layout.addStretch(1)
 
+    def handle_capture_event(self):
+        mode = self.get_selected_mode()
+        self.hide()
+        time.sleep(0.3)
+        
+        if screenshot_capture(mode=mode):
+            self.show()
+
     def get_selected_mode(self):
-        if not self.captureButtonGroup:
+        if not hasattr(self, 'btnScreen'):
             return "screen"
         
-        checkedButton = self.captureButtonGroup.checkedButton()
-        if checkedButton:
-            buttonText = checkedButton.text().lower()
-
-            if "screen" in buttonText:
-                return "screen"
-            elif "window" in buttonText:
-                return "window"
-            elif "selection" in buttonText:
-                return "selection"
+        if self.btnScreen.isChecked():
+            return "screen"
+        elif self.btnWindow.isChecked():
+            return "window"
+        elif self.btnSelection.isChecked():
+            return "area"
             
         return "screen"
+            
 
     def select_component(self):
         section = QWidget()
@@ -114,17 +119,17 @@ class SnappingTool(QWidget):
         self.captureButtonGroup = QButtonGroup(self)
         self.captureButtonGroup.setExclusive(True)
 
-        btnScreen = capture_button("Screen", icon_path="../Assets/screen.png", ischecked=True)
-        btnWindow = capture_button("Window", icon_path="../Assets/window.png")
-        btnSelection = capture_button("Selection", icon_path="../Assets/selection.png")
+        self.btnScreen = capture_button("Screen", icon_path="../Assets/screen.png", ischecked=True)
+        self.btnWindow = capture_button("Window", icon_path="../Assets/window.png")
+        self.btnSelection = capture_button("Selection", icon_path="../Assets/selection.png")
 
-        captureButtonLayout.addWidget(btnScreen)
-        captureButtonLayout.addWidget(btnWindow)
-        captureButtonLayout.addWidget(btnSelection)
+        captureButtonLayout.addWidget(self.btnScreen)
+        captureButtonLayout.addWidget(self.btnWindow)
+        captureButtonLayout.addWidget(self.btnSelection)
 
-        self.captureButtonGroup.addButton(btnScreen)
-        self.captureButtonGroup.addButton(btnWindow)
-        self.captureButtonGroup.addButton(btnSelection)
+        self.captureButtonGroup.addButton(self.btnScreen)
+        self.captureButtonGroup.addButton(self.btnWindow)
+        self.captureButtonGroup.addButton(self.btnSelection)
 
         layout.addLayout(captureButtonLayout)
 
