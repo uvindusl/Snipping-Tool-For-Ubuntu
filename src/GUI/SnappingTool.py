@@ -1,7 +1,6 @@
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QLabel, QButtonGroup
 from .captureButton import capture_button
 from ..functions.screenCapture import screenshot_capture
-import time
 
 class SnappingTool(QWidget):
     def __init__(self):
