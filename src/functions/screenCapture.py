@@ -19,8 +19,6 @@ def screenshot_capture(mode):
 
     subprocess.run(command, check=True)
 
-    print(f"Screenshot successfully saved to: {tempFileName}")
-
     dialog = SaveDialog(screenshotPath=tempFileName)
     dialog.exec_()
 
