@@ -4,10 +4,12 @@ from PyQt5.QtWidgets import (
     QPushButton, QLabel, QSizePolicy, QMessageBox
 )
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QDateTime
 from PIL import Image
 import pytesseract
 from .ExtractTextViewDialog import TextExtractDialog
+import os
+from pathlib import Path
 
 class SaveDialog(QDialog):
     def __init__(self, screenshotPath=None, parent=None):
@@ -122,7 +124,29 @@ class SaveDialog(QDialog):
         super().resizeEvent(event)
 
     def save_screenshot(self):
-        QMessageBox.information(self, "Success", f"Screenshot saved successfully.")
+        if self.originalPixmap and not self.originalPixmap.isNull():
+        
+            picturesDir = Path.home() / "Pictures"
+        
+            targetDir = picturesDir / "Screenshots"
+
+            try:
+                targetDir.mkdir(parents=True, exist_ok=True)
+            except OSError as e:
+                QMessageBox.critical(self, "Save Error", f"Failed to create directory: {targetDir}\nError: {e}")
+                return
+        
+            timestamp = QDateTime.currentDateTime().toString('yyyy-MM-dd hh-mm-ss')
+            fileName = f"Screenshot from {timestamp}.png"
+            finalPath = str(targetDir / fileName)
+
+            if self.originalPixmap.save(finalPath):
+                QMessageBox.information(self, "Success", f"Screenshot saved to:\n{finalPath}")
+                self.accept()
+            else:
+                QMessageBox.critical(self, "Save Error", f"Failed to save screenshot to:\n{finalPath}")
+        else:
+            QMessageBox.warning(self, "Error", "No screenshot available to save.")
 
     def copy_to_clipboard(self):
         if self.originalPixmap and not self.originalPixmap.isNull():

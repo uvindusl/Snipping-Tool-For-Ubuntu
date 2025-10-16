@@ -23,3 +23,6 @@ def screenshot_capture(mode):
 
     dialog = SaveDialog(screenshotPath=tempFileName)
     dialog.exec_()
+
+    if os.path.exists(tempFileName):
+        os.remove(tempFileName)
