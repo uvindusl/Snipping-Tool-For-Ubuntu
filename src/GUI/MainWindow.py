@@ -1,6 +1,8 @@
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QLabel, QButtonGroup
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QLabel, QButtonGroup
 from .captureButton import capture_button
 from ..functions.screenCapture import screenshot_capture
+import os
+from pathlib import Path
 
 class SnappingTool(QWidget):
     def __init__(self):
@@ -116,9 +118,15 @@ class SnappingTool(QWidget):
         self.captureButtonGroup = QButtonGroup(self)
         self.captureButtonGroup.setExclusive(True)
 
-        self.btnScreen = capture_button("Screen", icon_path="../Assets/screen.png", ischecked=True)
-        self.btnWindow = capture_button("Window", icon_path="../Assets/window.png")
-        self.btnSelection = capture_button("Selection", icon_path="../Assets/selection.png")
+        project_root = Path(os.getcwd())
+        
+        screen_icon_path = str(project_root / 'Assets' / 'screen.png')
+        window_icon_path = str(project_root / 'Assets' / 'window.png')
+        selection_icon_path = str(project_root / 'Assets' / 'selection.png')
+        
+        self.btnScreen = capture_button("Screen", icon_path=screen_icon_path, ischecked=True)
+        self.btnWindow = capture_button("Window", icon_path=window_icon_path)
+        self.btnSelection = capture_button("Selection", icon_path=selection_icon_path)
 
         captureButtonLayout.addWidget(self.btnScreen)
         captureButtonLayout.addWidget(self.btnWindow)
