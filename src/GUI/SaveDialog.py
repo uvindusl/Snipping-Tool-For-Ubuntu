@@ -7,6 +7,7 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 from PIL import Image
 import pytesseract
+from .ExtractTextViewDialog import TextExtractDialog
 
 class SaveDialog(QDialog):
     def __init__(self, screenshotPath=None, parent=None):
@@ -131,4 +132,6 @@ class SaveDialog(QDialog):
             QMessageBox.warning(self, "Error", "No screenshot to copy.")
 
     def extract_text(self):
-        print(pytesseract.image_to_string(Image.open(self.screenshotPath)))
+        text = pytesseract.image_to_string(Image.open(self.screenshotPath))
+        dialog = TextExtractDialog(extractText=text)
+        dialog.exec_()

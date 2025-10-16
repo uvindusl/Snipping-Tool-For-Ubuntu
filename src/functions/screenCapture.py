@@ -21,5 +21,5 @@ def screenshot_capture(mode):
 
     print(f"Screenshot successfully saved to: {tempFileName}")
 
-    dialog = SaveDialog(screenshot_path=tempFileName)
+    dialog = SaveDialog(screenshotPath=tempFileName)
     dialog.exec_()
