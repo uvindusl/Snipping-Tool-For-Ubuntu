@@ -2,6 +2,7 @@ import tempfile
 import os
 from datetime import datetime
 import subprocess
+from ..GUI.SaveDialog import SaveDialog
 
 def screenshot_capture(mode):
     tempDir = tempfile.gettempdir()
@@ -19,3 +20,6 @@ def screenshot_capture(mode):
     subprocess.run(command, check=True)
 
     print(f"Screenshot successfully saved to: {tempFileName}")
+
+    dialog = SaveDialog(screenshot_path=tempFileName)
+    dialog.exec_()
