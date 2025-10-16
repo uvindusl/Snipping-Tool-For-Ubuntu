@@ -1,4 +1,4 @@
-from .GUI.SnappingTool import QApplication, SnappingTool
+from .GUI.MainWindow import QApplication, SnappingTool
 import sys
 
 def main():
